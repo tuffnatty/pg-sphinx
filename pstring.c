@@ -28,3 +28,17 @@ int pstring_to_integer(const PString *pstr)
   return atoi(buf);
 }
 
+char* pstring_replace(const PString *pstr, char* a, char* b)
+{
+    char* p;
+    int len  = strlen(pstr->str);
+    int lena = strlen(a), lenb = strlen(b);
+    for (p = pstr->str; p = strstr(p, a); ++p) {
+        if (lena != lenb) {
+            memmove(p+lenb, p+lena, len - (p - pstr->str) + lenb);
+        }
+
+        memcpy(p, b, lenb);
+    }
+    return pstr;
+}

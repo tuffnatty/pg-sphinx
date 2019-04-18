@@ -90,6 +90,7 @@ sphinx_context sphinx_select(sphinx_config *config,
   if (PSTR_NOT_EMPTY(condition))
     {
       string_builder_append(sb, " AND ");
+      pstring_replace(condition, "\"", "'");
       string_builder_append_pstr(sb, condition);
     }
 
