@@ -24,6 +24,5 @@ int pstring_is_one_of(const PString *pstr, ...);
 
 int pstring_to_integer(const PString *pstr);
 
-char* pstring_replace(const PString *pstr, char* a, char* b)
 #endif
 

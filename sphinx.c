@@ -75,6 +75,7 @@ sphinx_context sphinx_select(sphinx_config *config,
 {
   StringBuilder *sb;
   sphinx_context ctx;
+  int current_pos=0;
 
   if (!ensure_sphinx_is_connected(config, error))
     return NULL;
@@ -86,11 +87,19 @@ sphinx_context sphinx_select(sphinx_config *config,
   string_builder_append(sb, " WHERE MATCH(");
   string_builder_append_sql_string(sb, match);
   string_builder_append(sb, ")");
-  
+
   if (PSTR_NOT_EMPTY(condition))
     {
       string_builder_append(sb, " AND ");
-      pstring_replace(condition, "\"", "'");
+
+      while(condition->str[current_pos]!='\0')
+	    {
+	        if(condition->str[current_pos]=='"')
+	        {
+	            condition->str[current_pos]='\'';
+	        }
+	        current_pos++;
+	    }
       string_builder_append_pstr(sb, condition);
     }
 
@@ -330,4 +339,3 @@ void sphinx_snippet(sphinx_config *config,
   string_builder_free(sb);
   mysql_free_result(query_result);
 }
-
