@@ -55,7 +55,7 @@ CREATE TABLE sphinx_config (
 GRANT ALL ON sphinx_config TO PUBLIC;
 
 INSERT INTO sphinx_config ("key", "value") VALUES
-  ('id_field', 'id')
+  ('id_field', 'id'),
   ('host', '127.0.0.1'),
   ('port', '9306'),
   ('username', ''),
