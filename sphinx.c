@@ -81,7 +81,7 @@ sphinx_context sphinx_select(sphinx_config *config,
     return NULL;
 
   sb = string_builder_new();
-  string_builder_append(sb, "SELECT id FROM ");
+  string_builder_append(sb, "SELECT id, object_id FROM ");
   string_builder_append(sb, config->prefix);
   string_builder_append_pstr(sb, index);
   string_builder_append(sb, " WHERE MATCH(");
@@ -136,6 +136,7 @@ sphinx_context sphinx_select(sphinx_config *config,
 
 SPH_BOOL sphinx_context_next(sphinx_context ctx,
                              int *id,
+                             int *object_id,
                              int *weight)
 {
   MYSQL_ROW row;
@@ -149,8 +150,10 @@ SPH_BOOL sphinx_context_next(sphinx_context ctx,
 
   if (id)
     *id = row[0] ? atoi(row[0]) : 0;
+  if (object_id)
+    *object_id = row[1] ? atoi(row[1]) : 0;
   if (weight)
-    *weight = row[1] ? atoi(row[1]) : 0;
+    *weight = row[2] ? atoi(row[2]) : 0;
 
   return SPH_TRUE;
 }
