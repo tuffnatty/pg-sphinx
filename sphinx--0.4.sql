@@ -1,4 +1,4 @@
-CREATE TYPE sphinx_search_result AS (id int, object_id int, weight int);
+CREATE TYPE sphinx_search_result AS (id int, weight int);
 
 CREATE OR REPLACE FUNCTION sphinx_select(
   /*index*/     varchar,
@@ -55,6 +55,7 @@ CREATE TABLE sphinx_config (
 GRANT ALL ON sphinx_config TO PUBLIC;
 
 INSERT INTO sphinx_config ("key", "value") VALUES
+  ('id_field', 'id')
   ('host', '127.0.0.1'),
   ('port', '9306'),
   ('username', ''),

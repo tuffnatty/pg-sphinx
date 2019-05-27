@@ -9,6 +9,7 @@ typedef int SPH_BOOL;
 #define SPH_FALSE (0)
 
 typedef struct {
+  char            id_field[64]
   char            host[128];
   unsigned short  port;
   char            username[64];
@@ -31,7 +32,6 @@ sphinx_context sphinx_select(sphinx_config *config,
                              char **error);
 SPH_BOOL sphinx_context_next(sphinx_context ctx,
                              /*OUT*/ int *id,
-                             /*OUT*/ int *object_id,
                              /*OUT*/ int *weight);
 void sphinx_context_free(sphinx_context ctx);
 

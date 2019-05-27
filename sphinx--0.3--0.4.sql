@@ -1,1 +1,0 @@
-DROP TYPE IF EXISTS public.sphinx_search_result; -- ALTER нельзя, не работает с ним
