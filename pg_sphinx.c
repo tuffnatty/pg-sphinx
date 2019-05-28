@@ -97,6 +97,8 @@ static int fetch_config(sphinx_config *config)
         STRLCPY(config->password, val, sizeof(config->password));
       else if (!strcmp(key, "prefix"))
         STRLCPY(config->prefix, val, sizeof(config->prefix));
+      else if (!strcmp(key, "id_field"))
+        STRLCPY(config->id_field, val, sizeof(config->id_field));
 
       pfree(key);
       pfree(val);

@@ -9,6 +9,7 @@ typedef int SPH_BOOL;
 #define SPH_FALSE (0)
 
 typedef struct {
+  char            id_field[64];
   char            host[128];
   unsigned short  port;
   char            username[64];

@@ -9,6 +9,7 @@
 
 void default_config(sphinx_config *config)
 {
+  strcpy(config->id_field, "id");
   strcpy(config->host, "127.0.0.1");
   config->port = 9306;
   config->username[0] = '\0';
@@ -81,7 +82,9 @@ sphinx_context sphinx_select(sphinx_config *config,
     return NULL;
 
   sb = string_builder_new();
-  string_builder_append(sb, "SELECT id FROM ");
+  string_builder_append(sb, "SELECT ");
+  string_builder_append(sb, config->id_field);
+  string_builder_append(sb, " FROM ");
   string_builder_append(sb, config->prefix);
   string_builder_append_pstr(sb, index);
   string_builder_append(sb, " WHERE MATCH(");
@@ -103,7 +106,8 @@ sphinx_context sphinx_select(sphinx_config *config,
       string_builder_append_pstr(sb, condition);
     }
 
-  //string_builder_append(sb, " GROUP BY id WITHIN GROUP ORDER BY weight DESC ");
+  string_builder_append(sb, " GROUP BY ");
+  string_builder_append(sb, config->id_field);
 
   if (PSTR_NOT_EMPTY(order))
     {
