@@ -172,7 +172,7 @@ Datum pg_sphinx_select(PG_FUNCTION_ARGS)
     {
       Datum result;
       Datum values[2];
-      char nulls[2] = {0, 0};
+      bool nulls[2];
 
       values[0] = Int32GetDatum(id);
       values[1] = Int32GetDatum(weight);
