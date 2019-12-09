@@ -170,10 +170,8 @@ Datum pg_sphinx_select(PG_FUNCTION_ARGS)
         }
 
         if (error) {
-            file = fopen("/var/lib/pgsql/pg_sphinx_error.log","a");
-            fprintf(file, "%s\n", error);
+            elog(ERROR, "%s", error);
             free(error);
-            fclose(file);
             error = NULL;
         }
 
@@ -208,7 +206,6 @@ Datum pg_sphinx_select(PG_FUNCTION_ARGS)
         pfree(values[1]);
         pfree(values);
 
-        fclose(file);
         SRF_RETURN_NEXT(funcctx, result);
     }
     else
