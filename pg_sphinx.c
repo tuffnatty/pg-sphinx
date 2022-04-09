@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <postgres.h>
 #include <fmgr.h>
 #include <funcapi.h>
@@ -118,10 +119,10 @@ Datum pg_sphinx_select(PG_FUNCTION_ARGS)
     AttInMetadata       *attinmeta;
 
     sphinx_context ctx;
-    int id, weight;
+    int64_t id;
+    int weight;
 
     char *error = NULL;
-    FILE *file = NULL;
 
     if (SRF_IS_FIRSTCALL())
     {
@@ -189,10 +190,10 @@ Datum pg_sphinx_select(PG_FUNCTION_ARGS)
         Datum        result;
 
         values = (char **) palloc(3 * sizeof(char *));
-        values[0] = (char *) palloc(16 * sizeof(char));
+        values[0] = (char *) palloc(32 * sizeof(char));
         values[1] = (char *) palloc(16 * sizeof(char));
 
-        snprintf(values[0], 16, "%d", id);
+        snprintf(values[0], 16, "%" PRId64, id);
         snprintf(values[1], 16, "%d", weight);
 
         /* build a tuple */
@@ -252,7 +253,7 @@ static int array_to_dict(ArrayType *input, Dict *dict)
 Datum pg_sphinx_replace(PG_FUNCTION_ARGS)
 {
     PString index = {0, 0};
-    int id;
+    int64_t id;
     ArrayType *input;
     char *error = NULL;
     sphinx_config config;
@@ -262,7 +263,7 @@ Datum pg_sphinx_replace(PG_FUNCTION_ARGS)
         PG_RETURN_VOID();
 
     TO_PSTRING(index, PG_GETARG_DATUM(0), 0);
-    id = PG_GETARG_UINT32(1);
+    id = PG_GETARG_INT64(1);
     input = PG_GETARG_ARRAYTYPE_P(2);
 
     if (array_to_dict(input, &data))
@@ -284,7 +285,7 @@ Datum pg_sphinx_replace(PG_FUNCTION_ARGS)
 Datum pg_sphinx_delete(PG_FUNCTION_ARGS)
 {
     PString index = {0, 0};
-    int id;
+    int64_t id;
     char *error = NULL;
     sphinx_config config;
 
@@ -292,7 +293,7 @@ Datum pg_sphinx_delete(PG_FUNCTION_ARGS)
         PG_RETURN_VOID();
 
     TO_PSTRING(index, PG_GETARG_DATUM(0), 0);
-    id = PG_GETARG_UINT32(1);
+    id = PG_GETARG_INT64(1);
 
     fetch_config(&config);
     sphinx_delete(&config, &index, id, &error);

@@ -31,19 +31,19 @@ sphinx_context sphinx_select(sphinx_config *config,
                              const PString *options,
                              char **error);
 SPH_BOOL sphinx_context_next(sphinx_context ctx,
-                             /*OUT*/ int *id,
+                             /*OUT*/ int64_t *id,
                              /*OUT*/ int *weight);
 void sphinx_context_free(sphinx_context ctx);
 
 void sphinx_replace(sphinx_config *config,
                     const PString *index,
-                    int id,
+                    int64_t id,
                     const Dict *data,
                     char **error);
 
 void sphinx_delete(sphinx_config *config,
                    const PString *index,
-                   int id,
+                   int64_t id,
                    char **error);
 
 typedef void (*return_data_callback)(void *data, size_t size, void *user_data);

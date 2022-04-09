@@ -64,7 +64,7 @@
   #+BEGIN_SRC sql
   sphinx_replace(
       /*index*/     varchar,
-      /*id*/        int,
+      /*id*/        bigint,
       /*data*/      varchar[])
   #+END_SRC
 
@@ -76,7 +76,7 @@
   #+BEGIN_SRC sql
   sphinx_delete(
       /*index*/     varchar,
-      /*id*/        int)
+      /*id*/        bigint)
   #+END_SRC
 
   Removes specified document.

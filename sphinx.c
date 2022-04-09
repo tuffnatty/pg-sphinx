@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <memory.h>
@@ -49,6 +50,12 @@ static void string_builder_append_int(StringBuilder *sb, int val)
 {
   string_builder_reserve(sb, 40);
   sb->len += snprintf(sb->str + sb->len, 40, "%d", val);
+}
+
+static void string_builder_append_int64(StringBuilder *sb, int64_t val)
+{
+  string_builder_reserve(sb, 40);
+  sb->len += snprintf(sb->str + sb->len, 40, "%" PRId64, val);
 }
 
 static void string_builder_append_sql_string(StringBuilder *sb, const PString *str)
@@ -139,7 +146,7 @@ sphinx_context sphinx_select(sphinx_config *config,
 }
 
 SPH_BOOL sphinx_context_next(sphinx_context ctx,
-                             int *id,
+                             int64_t *id,
                              int *weight)
 {
   MYSQL_ROW row;
@@ -152,7 +159,7 @@ SPH_BOOL sphinx_context_next(sphinx_context ctx,
     return SPH_FALSE;
 
   if (id)
-    *id = row[0] ? atoi(row[0]) : 0;
+    *id = row[0] ? strtoull(row[0], NULL, 10) : 0;
   if (weight)
     *weight = row[1] ? atoi(row[1]) : 0;
 
@@ -170,7 +177,7 @@ void sphinx_context_free(sphinx_context ctx)
 
 void sphinx_replace(sphinx_config *config,
                     const PString *index,
-                    int id,
+                    int64_t id,
                     const Dict *data,
                     char **error)
 {
@@ -192,7 +199,7 @@ void sphinx_replace(sphinx_config *config,
       string_builder_append(sb, "`");
     }
   string_builder_append(sb, ") VALUES (");
-  string_builder_append_int(sb, id);
+  string_builder_append_int64(sb, id);
   for (i = 0; i < data->len; ++i)
     {
       string_builder_append(sb, ", ");
@@ -208,7 +215,7 @@ void sphinx_replace(sphinx_config *config,
 
 void sphinx_delete(sphinx_config *config,
                    const PString *index,
-                   int id,
+                   int64_t id,
                    char **error)
 {
   StringBuilder *sb;
@@ -221,7 +228,7 @@ void sphinx_delete(sphinx_config *config,
   string_builder_append(sb, config->prefix);
   string_builder_append_pstr(sb, index);
   string_builder_append(sb, " WHERE id = ");
-  string_builder_append_int(sb, id);
+  string_builder_append_int64(sb, id);
 
   if (mysql_query(connection, sb->str))
     REPORT(error, "Can't execute delete query: ", sb->str, "; ", mysql_error(connection));

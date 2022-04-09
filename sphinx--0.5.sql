@@ -1,4 +1,4 @@
-CREATE TYPE sphinx_search_result AS (id int, weight int);
+CREATE TYPE sphinx_search_result AS (id bigint, weight int);
 
 CREATE OR REPLACE FUNCTION sphinx_select(
   /*index*/     varchar,
@@ -14,7 +14,7 @@ LANGUAGE C IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION sphinx_replace(
   /*index*/     varchar,
-  /*id*/        int,
+  /*id*/        bigint,
   /*data*/      varchar[])
 RETURNS VOID
 AS 'sphinx', 'pg_sphinx_replace'
@@ -22,7 +22,7 @@ LANGUAGE C IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION sphinx_delete(
   /*index*/     varchar,
-  /*id*/        int)
+  /*id*/        bigint)
 RETURNS VOID
 AS 'sphinx', 'pg_sphinx_delete'
 LANGUAGE C IMMUTABLE;
